@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import useAudioStreamer from "../hooks/useAudioStreamer";
 import { Headphones } from "react-feather";
 
-const URL = "http://localhost:3000";
+const URL = import.meta.env.VITE_API_ENDPOINT;
 
 function Listen() {
     const socketRef = useRef(io(URL));

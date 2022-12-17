@@ -1,17 +1,19 @@
+import dotenv from "dotenv";
 import express from "express";
 import http from "http";
 import { Server as IOServer } from "socket.io";
-import queue from "./queue";
+import queue from "./queue.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const PORT = 3000;
+dotenv.config();
+const PORT = process.env.PORT || 4000;
 const app = express();
 const server = http.createServer(app);
 const io = new IOServer(server, {
-    cors: {
-        origin: "http://localhost:5173",
-    }
+  cors: {
+    origin: process.env.CLIENT_ENDPOINT || "http://localhost:5173",
+  },
 });
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,7 +23,7 @@ const outputDir = path.join(__dirname, "../dist");
 app.use(express.static(outputDir));
 
 app.get("/", function (req, res) {
-    res.sendFile(path.join(outputDir, "index.html"));
+  res.sendFile(path.join(outputDir, "index.html"));
 });
 
 (async () => {
@@ -34,30 +36,30 @@ app.get("/", function (req, res) {
     // Every new streamer must receive the header
     if (queue.bufferHeader) {
       socket.emit("bufferHeader", queue.bufferHeader);
-    };
-    
+    }
+
     socket.on("bufferHeader", (header) => {
-        queue.bufferHeader = header;
-        socket.broadcast.emit("bufferHeader", queue.bufferHeader);
-    })
+      queue.bufferHeader = header;
+      socket.broadcast.emit("bufferHeader", queue.bufferHeader);
+    });
 
     socket.on("stream", (packet) => {
-        // Only broadcast microphone if a header has been received
-        if (!queue.bufferHeader) return;
+      // Only broadcast microphone if a header has been received
+      if (!queue.bufferHeader) return;
 
-        // Audio stream from host microphone
-        socket.broadcast.emit("stream", packet);
+      // Audio stream from host microphone
+      socket.broadcast.emit("stream", packet);
     });
 
     socket.on("control", (command) => {
-        switch (command) {
-            case "pause":
-                queue.pause();
-                break;
-            case "resume":
-                queue.resume();
-                break;
-        }
+      switch (command) {
+        case "pause":
+          queue.pause();
+          break;
+        case "resume":
+          queue.resume();
+          break;
+      }
     });
   });
 
