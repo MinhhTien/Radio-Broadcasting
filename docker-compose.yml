@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  radio:
+    container_name: radio_broadcast
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command:
+      - sh
+      - -c
+      - 'npm start'
+    ports:
+      - 4000:4000
+    volumes:
+      - tracks:/app/tracks
+    restart: always
+
+volumes:
+  tracks:

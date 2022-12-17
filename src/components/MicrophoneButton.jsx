@@ -3,11 +3,13 @@ import { Mic, MicOff } from "react-feather";
 import { AudioRecorder } from "jnaudiostream";
 
 export default function MicrophoneButton({ socket }) {
-    const recordRef = useRef(new AudioRecorder({}, 100)); //1ms
+    const [recording, setRecording] = useState(false);
+
+    const recorderRef = useRef(new AudioRecorder({}, 100)); //1ms
 
     useEffect(() => {
         if(!socket) return;
-        const recorder = recordRef.current;
+        const recorder = recorderRef.current;
 
         recorder.onReady = (packet) => {
             console.log("Record started!");
