@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag radio
+      run: docker build . --file Dockerfile --tag radio-broadcasting
 
   running:
 
@@ -24,4 +24,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Running the Docker image
-      run: docker run -d -p 4000:4000 --name radio radio-broadcasting
+      run: docker run -d -p 4000:4000 --name radio-broadcast radio-broadcasting
