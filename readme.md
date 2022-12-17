@@ -1,14 +1,23 @@
-# radio-broadcast
+# Radio Broadcasting App
 
 ## Setting up
 
+```
+npm i
+```
+
+## Build
+
+```
+npm run build
+```
+
 ### Music
 
-Put your songs into the `tracks` folder
+Upload your songs into the `tracks` folder
 
 ### Running
 
 ```
-npm i
-npm run start
+npm start
 ```
